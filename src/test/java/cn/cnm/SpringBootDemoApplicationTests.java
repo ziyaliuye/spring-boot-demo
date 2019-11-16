@@ -1,4 +1,4 @@
-package cn.cnm.demo;
+package cn.cnm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
