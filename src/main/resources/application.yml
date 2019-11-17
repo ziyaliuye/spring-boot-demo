@@ -1,0 +1,16 @@
+server:
+  port: 8088
+
+person:
+  lastName: zhangsan
+  age: 20
+  boss: false
+  birth: 2018/08/08
+  maps: {k1: v1, k2: 18}
+  lists:
+    - wocao
+    - caodan
+    - rinimei
+  dog:
+    name: 二哈
+    age: 1
