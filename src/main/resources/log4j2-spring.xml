@@ -6,8 +6,8 @@
     <properties>
         <!-- 这里随意， sys:catalina.home为tomcat的路径，mybatis-demo是项目的名字  -->
          
-        <property name="LOG_HOME">D:/logs/mybatis-demo</property>
-        <property name="FILE_NAME">mybatis-demo</property>
+        <property name="LOG_HOME">D:/logs/spring-boot-demo</property>
+        <property name="FILE_NAME">spring-boot-demo</property>
     </properties>
 
     <Appenders>

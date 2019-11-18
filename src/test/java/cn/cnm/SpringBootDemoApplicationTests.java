@@ -29,7 +29,7 @@ class SpringBootDemoApplicationTests {
     }
 
     /* 日志系统使用测试 */
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
 
     @Test
     void logTest() {
