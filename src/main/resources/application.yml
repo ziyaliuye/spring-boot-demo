@@ -13,7 +13,7 @@ person:
     age: 1
 
 # 打印加载了哪些配置没有加载哪些配置
-debug: false
+# debug: false
 
 # 指定log4j2的配置文件, 默认会从项目根目录找名叫log4j2-spring1.xml的配置文件
 logging:

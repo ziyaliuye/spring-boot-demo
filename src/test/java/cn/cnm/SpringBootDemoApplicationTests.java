@@ -33,6 +33,9 @@ class SpringBootDemoApplicationTests {
 
     @Test
     void logTest() {
+        /* 日志的级别由低到高 */
+        // trace输出日志
+        logger.trace("trace logger message...");
         // debug输出日志
         logger.debug("debug logger message...");
         // info输出日志
