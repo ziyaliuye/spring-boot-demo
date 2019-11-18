@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<configuration status="DEBUG" monitorInterval="30">
+    <properties>
+        <!-- 这里随意， sys:catalina.home为tomcat的路径，mybatis-demo是项目的名字  -->
+         
+        <property name="LOG_HOME">D:/logs/mybatis-demo</property>
+        <property name="FILE_NAME">mybatis-demo</property>
+    </properties>
+
+    <Appenders>
+        <!-- 控制台日志, 生成环境可以考虑注释关闭  -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- error 日志 -->
+        <RollingFile name="error-log" fileName="${LOG_HOME}/${FILE_NAME}_error.log"
+                     filePattern="${LOG_HOME}/error/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.%level_log.gz"
+                     immediateFlush="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%date{yyyy-MM-dd HH:mm:ss} %level [%thread][%file:%line] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="90"/>
+        </RollingFile>
+
+        <!-- warn 日志 -->
+        <RollingFile name="warn-log" fileName="${LOG_HOME}/${FILE_NAME}_warn.log"
+                     filePattern="${LOG_HOME}/warn/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.%level_log.gz"
+                     immediateFlush="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%date{yyyy-MM-dd HH:mm:ss} %level [%thread][%file:%line] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="90"/>
+        </RollingFile>
+
+        <!-- info 日志 -->
+        <RollingFile name="info-log" fileName="${LOG_HOME}/${FILE_NAME}_info.log"
+                     filePattern="${LOG_HOME}/info/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.%level_log.gz"
+                     immediateFlush="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%date{yyyy-MM-dd HH:mm:ss} %level [%thread][%file:%line] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="90"/>
+        </RollingFile>
+
+        <!-- debug 日志 -->
+        <RollingFile name="debug-log" fileName="${LOG_HOME}/${FILE_NAME}_debug.log"
+                     filePattern="${LOG_HOME}/debug/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz"
+                     immediateFlush="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%date{yyyy-MM-dd HH:mm:ss} %level [%thread][%file:%line] - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="90"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 正式环境↓ 改为 info 级别 -->
+        <Root level="debug">
+            <!-- 这里是输入到文件-->
+            <appender-ref ref="error-log"/>
+            <appender-ref ref="warn-log"/>
+            <appender-ref ref="info-log"/>
+            <!-- 正式环境 下面 ↓  两项删除     -->
+            <appender-ref ref="debug-log"/>
+            <appender-ref ref="Console"/>
+        </Root>
+    </Loggers>
+</configuration>

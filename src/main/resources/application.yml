@@ -12,6 +12,12 @@ person:
     name: 二哈
     age: 1
 
+# 指定log4j2的配置文件, 默认会从项目根目录找名叫log4j2-spring1.xml的配置文件
+logging:
+  config: classpath:log4j2-spring.xml
+  level:
+    cn.jay.repository: trace
+
 # 激活dev配置文件
 spring:
   profiles:
