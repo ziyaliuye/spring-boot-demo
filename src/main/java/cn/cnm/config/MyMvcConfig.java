@@ -1,6 +1,9 @@
 package cn.cnm.config;
 
+import cn.cnm.component.MyLocaleResolver;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,5 +21,11 @@ public class MyMvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         // 浏览器发起caca请求也会跳转到success页面， 无需在写一个Controller
         registry.addViewController("/caca").setViewName("success");
+    }
+
+    // 将自定义的国际化组件添加到容器中
+    @Bean
+    public LocaleResolver localResolver() {
+        return new MyLocaleResolver();
     }
 }
