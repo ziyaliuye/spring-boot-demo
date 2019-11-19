@@ -18,7 +18,6 @@ public class MyLocaleResolver implements LocaleResolver {
     public Locale resolveLocale(HttpServletRequest request) {
         // 从request中获取参数， 看是否有国际化的参数
         String i18n = request.getParameter("i18n");
-        System.out.println("=============i18n");
         // 如果没有内容则使用默认的Locale
         Locale locale = Locale.getDefault();
         if (StringUtils.isEmpty(i18n)) {
