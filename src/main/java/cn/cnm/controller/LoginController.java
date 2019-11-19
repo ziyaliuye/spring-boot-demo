@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -28,10 +29,13 @@ public class LoginController {
     // @RequestParam("username") ：如果username参数为空则报错
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        Map<String, Object> map) {
+                        Map<String, Object> map,
+                        HttpSession session) {
         // 假定账户为user密码123456
         if (!StringUtils.isEmpty(username) && "123456".equals(password)) {
             // 登录成功
+            /* 将登录状态存入Session中 */
+            session.setAttribute("loginUser", username);
             return "dashboard";
         } else {
             // 登录失败
