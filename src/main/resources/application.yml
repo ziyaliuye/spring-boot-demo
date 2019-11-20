@@ -32,6 +32,19 @@ spring:
     url: jdbc:mysql://192.168.58.128:3306/ssm?serverTimezone=UTC
     # url: jdbc:mysql://localhost:3306/ssm?serverTimezone=UTC&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # 如果有需求， 可以更换数据数据连接池
+    type: com.alibaba.druid.pool.DruidDataSource
+    # druid数据源配置， 这些配置在数据源中是没有的， 需要在配置文件类中指定
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
 
 # 多环境文档块配置
 ---
