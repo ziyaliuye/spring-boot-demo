@@ -72,6 +72,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <!-- SpringBoot驱动默认是5.X， 使用其他版本数据需要指定版本 -->
+            <version>8.0.16</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -131,7 +141,6 @@
             <artifactId>bootstrap</artifactId>
             <version>4.0.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

@@ -8,7 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -42,5 +47,18 @@ class SpringBootDemoApplicationTests {
         logger.info("info logger message...");
         // rrror输出日志
         logger.error("info logger message...");
+    }
+
+    /* 注入数据源即可使用 */
+    @Autowired
+    DataSource dataSource;
+    /* SpringBoot提供的JdbcTemplate， 简化代码 */
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Test
+    void testJDBC() {
+        List<Map<String, Object>> list = jdbcTemplate.queryForList("select * from flower");
+        System.out.println(list);
     }
 }
