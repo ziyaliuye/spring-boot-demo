@@ -1,15 +1,10 @@
 package cn.cnm.controller;
 
-import cn.cnm.pojo.Department;
 import cn.cnm.pojo.Employee;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.StringUtils;
-
-import javax.servlet.http.HttpSession;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author lele
