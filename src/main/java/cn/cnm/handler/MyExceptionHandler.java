@@ -4,7 +4,6 @@ import cn.cnm.exception.UserNotExistException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,4 +27,6 @@ public class MyExceptionHandler {
         map.put("message", e.getMessage());
         return map;
     }
+
+
 }
