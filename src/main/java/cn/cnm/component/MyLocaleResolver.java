@@ -9,7 +9,7 @@ import java.util.Locale;
 /**
  * @author lele
  * @version 1.0
- * @Description 可以在连接上携带区域信息
+ * @Description 可以在URL上携带区域信息
  * @Email 414955507@qq.com
  * @date 2019/11/19 21:18
  */
