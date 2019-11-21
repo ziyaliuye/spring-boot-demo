@@ -49,6 +49,7 @@ spring:
   redis:
     host: 192.168.58.128
     password: root
+    timeToLive: 1000000 #毫秒
 
 # redis配置
 
