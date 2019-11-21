@@ -1,8 +1,10 @@
 package cn.cnm.mapper;
 
 import cn.cnm.pojo.Flower;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @author lele
@@ -16,4 +18,10 @@ import org.apache.ibatis.annotations.Select;
 public interface FlowerMapper {
     @Select("select * from flower where id = #{id} ")
     Flower selectById(Integer id);
+
+    @Update("update flower set version = 1 where id = #{id} ")
+    void updateById(Integer id);
+
+    @Delete("delete flower where id = #{id} ")
+    void deleteById(Integer id);
 }
