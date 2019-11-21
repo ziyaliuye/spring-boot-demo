@@ -7,7 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -90,5 +94,19 @@ class SpringBootDemoApplicationTests {
         for (Map<String, Object> m : list) {
             mapRedisTemplate.opsForValue().set("flower" + m.get("id"), m);
         }
+    }
+
+    // @Qualifier指定获取容器指定ID的Bean
+    @Qualifier("flowerCacheManager")
+    @Autowired
+    RedisCacheManager flowerCacheManager;
+
+    @Test
+    public void cacheManagerTest() {
+        // 直接拉取指定缓存进行操作, 不存在就会新建
+        Cache flower = flowerCacheManager.getCache("flower");
+        // 相当于新建了一个key-value
+        flower.put("heihei", "wocao");
+        System.out.println(flower.toString());
     }
 }

@@ -72,7 +72,7 @@ import javax.annotation.Resource;
  *      2）、key使用keyGenerator生成的，默认是SimpleKeyGenerator
  */
 /* 指定整个类下的方法的缓存公共属性 */
-@CacheConfig(cacheNames = "flower")
+@CacheConfig(cacheNames = "flower", cacheManager = "flowerCacheManager")
 public class FlowerServiceImpl implements FlowerService {
     @Resource
     private FlowerMapper flowerMapper;
