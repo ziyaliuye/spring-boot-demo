@@ -1,5 +1,6 @@
 package cn.cnm;
 
+import cn.cnm.pojo.Flower;
 import cn.cnm.pojo.Person;
 import cn.cnm.service.HelloService;
 import org.apache.logging.log4j.LogManager;
@@ -142,7 +143,14 @@ class SpringBootDemoApplicationTests {
         // rabbitTemplate.receive();
         // 接收消息体并转换需要的对象
         Object obj = rabbitTemplate.receiveAndConvert("cn.news");
-        System.out.println(obj.getClass());
         System.out.println(obj);
+    }
+
+    // 监听测试
+    @Test
+    public void rabbitListenerTest() {
+        Flower flower = new Flower(1, "菊花", 8.8F, "哈哈", 1);
+        // 第一个参数：交换器 第二个参数：路由键 第三个参数：要发送的对象， 会自动序列化并当成消息体发送
+        rabbitTemplate.convertAndSend("exchange.direct", "cn.news", flower);
     }
 }

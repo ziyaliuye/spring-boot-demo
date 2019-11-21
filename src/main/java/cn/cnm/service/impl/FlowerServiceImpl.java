@@ -3,6 +3,8 @@ package cn.cnm.service.impl;
 import cn.cnm.mapper.FlowerMapper;
 import cn.cnm.pojo.Flower;
 import cn.cnm.service.FlowerService;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -101,5 +103,19 @@ public class FlowerServiceImpl implements FlowerService {
     @Override
     public void deleteById(Integer id) {
         // flowerMapper.deleteById(id);
+    }
+
+    /* 消息监听， queues属性对应一个数组， 可以监听多个队列 */
+    @RabbitListener(queues = "cn.news")
+    public void receive(Flower flower) {
+        // 队列的消息会自动转换
+        System.out.println("接收到消息：" + flower);
+    }
+
+    /* 还可以获取消息实例， 从中获取消息头信息 */
+    @RabbitListener(queues = "cn.emps")
+    public void receiveMessage(Message message) {
+        System.out.println("消息头信息：：" + message.getMessageProperties());
+        System.out.println("消息体信息：" + message);
     }
 }
