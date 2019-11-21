@@ -6,6 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +21,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,5 +113,36 @@ class SpringBootDemoApplicationTests {
         // 相当于新建了一个key-value
         flower.put("heihei", "wocao");
         System.out.println(flower.toString());
+    }
+
+    /* 操作RabbitMQ */
+    // RabbitTemplate用于操作RabbitMQ， 发送、消费消息等操作
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+    // AmqpAdmin用于管理RabbitMQ组件， 用于创建队列、交换器等操作
+    @Autowired
+    AmqpAdmin amqpAdmin;
+
+    // 单播（点对点）消息发送测试
+    @Test
+    public void rabbitDirectSend() {
+        // 第一个参数：交换器 第二个参数：路由键 第三个参数：要发送的消息（需要自己构建消息对象）
+        // rabbitTemplate.send("", "", Message);
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg1", "Hello first AMQP...");
+        map.put("msg2", Arrays.asList("you", "are", "da", "shabi"));
+        // 第一个参数：交换器 第二个参数：路由键 第三个参数：要发送的对象， 会自动序列化并当成消息体发送
+        rabbitTemplate.convertAndSend("exchange.direct", "cn.news", map);
+    }
+
+    // 单播（点对点）消息接收测试
+    @Test
+    public void rabbitDirectReceive() {
+        // 接收指定队列的消息， 只接收消息头， 没有消息体
+        // rabbitTemplate.receive();
+        // 接收消息体并转换需要的对象
+        Object obj = rabbitTemplate.receiveAndConvert("cn.news");
+        System.out.println(obj.getClass());
+        System.out.println(obj);
     }
 }

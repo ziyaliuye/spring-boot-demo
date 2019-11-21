@@ -51,6 +51,14 @@ spring:
     password: root
     timeToLive: 1000000 #毫秒
 
+  # RabbitMQ相关配置
+  rabbitmq:
+    host: 192.168.58.128
+    username: root
+    password: root
+    port: 5672
+    virtual-host: /
+
 # redis配置
 
 # 多环境文档块配置

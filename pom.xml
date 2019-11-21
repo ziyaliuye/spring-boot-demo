@@ -169,6 +169,16 @@
             <artifactId>bootstrap</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <!-- RabbitMQ以及相关 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
+        </dependency>
     </dependencies>
 
     <build>
