@@ -58,6 +58,12 @@ spring:
     password: root
     port: 5672
     virtual-host: /
+    # 控制监听的并发情况
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5
+        max-concurrency: 10
 
 # redis配置
 
