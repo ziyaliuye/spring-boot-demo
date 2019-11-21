@@ -4,7 +4,6 @@ import cn.cnm.pojo.Flower;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -14,9 +13,6 @@ import org.springframework.data.redis.serializer.*;
 
 import java.time.Duration;
 import java.util.Map;
-
-
-import static java.util.Collections.singletonMap;
 
 /**
  * @author lele
