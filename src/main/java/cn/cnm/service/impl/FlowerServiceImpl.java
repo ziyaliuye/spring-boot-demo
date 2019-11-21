@@ -3,6 +3,7 @@ package cn.cnm.service.impl;
 import cn.cnm.mapper.FlowerMapper;
 import cn.cnm.pojo.Flower;
 import cn.cnm.service.FlowerService;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,8 @@ import javax.annotation.Resource;
  *      1）、使用CacheManager【ConcurrentMapCacheManager】按照名字得到Cache【ConcurrentMapCache】组件
  *      2）、key使用keyGenerator生成的，默认是SimpleKeyGenerator
  */
+/* 指定整个类下的方法的缓存公共属性 */
+@CacheConfig(cacheNames = "flower")
 public class FlowerServiceImpl implements FlowerService {
     @Resource
     private FlowerMapper flowerMapper;
@@ -78,7 +81,7 @@ public class FlowerServiceImpl implements FlowerService {
     /* @Cacheable 为方法加上缓存 */
     // @Cacheable(cacheNames = "flower", key = "#root.args[0]", condition = "#id<5")
     // @Cacheable(cacheNames = "flower", keyGenerator = "myKeyGenerator", condition = "#id<5")
-    @Cacheable(cacheNames = "flower", key = "#id", condition = "#id<5")
+    @Cacheable(key = "#id", condition = "#id<5")
     public Flower selectById(Integer id) {
         return flowerMapper.selectById(id);
     }
@@ -90,7 +93,7 @@ public class FlowerServiceImpl implements FlowerService {
      *  key可以使用#result， 但是@Cacheable中无法使用#result
      *      因为@Cacheable是在操作之前进行缓存检查，所以#result压根没东西， 而@CachePut是在操作之后
      */
-    @CachePut(value = "flower", key = "#id", condition = "#id<5")
+    @CachePut(key = "#id", condition = "#id<5")
     public void updateById(Integer id) {
         flowerMapper.updateById(id);
     }
