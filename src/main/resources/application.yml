@@ -46,6 +46,12 @@ spring:
     testOnBorrow: false
     testOnReturn: false
 
+  redis:
+    host: 192.168.58.128
+    password: root
+
+# redis配置
+
 # 多环境文档块配置
 ---
 # 开发环境配置

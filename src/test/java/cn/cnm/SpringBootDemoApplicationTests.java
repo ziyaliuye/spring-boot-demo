@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -60,5 +62,33 @@ class SpringBootDemoApplicationTests {
     void testJDBC() {
         List<Map<String, Object>> list = jdbcTemplate.queryForList("select * from flower");
         System.out.println(list);
+    }
+
+    /* redis操作示例 */
+    // redis操作模板类， key value形式
+    @Autowired
+    RedisTemplate redisTemplate;
+    @Autowired
+    // 因为redis String操作比较频繁， 所以Spring单独抽出一个String的模版类
+            StringRedisTemplate stringRedisTemplate;
+    /* 名字都叫RedisTemplate， 根据泛型来区别使用哪个模板类 */
+    @Autowired
+    RedisTemplate<Object, Map<String, Object>> mapRedisTemplate;
+
+    @Test
+    void redisTest() {
+        /*  操作方法：opsXxxx().xxx  ops是指操作的数据对应的类型， 第二个xxx才是操作的方式 */
+        // 将String类型的msg追加"redis.."
+        stringRedisTemplate.opsForValue().append("msg", "redis..");
+        System.out.println("msg：" + stringRedisTemplate.opsForValue().get("msg"));
+        stringRedisTemplate.opsForList().leftPush("mylist", "7");
+        stringRedisTemplate.opsForList().leftPop("mylist");
+        System.out.println("mylist" + stringRedisTemplate.opsForList().range("mylist", 0, 6));
+
+        // 保存一个对象（注意对象以及对象的属性对象都需要实现序列化）， 通常保存为json串， 不需要实现序列户接口
+        List<Map<String, Object>> list = jdbcTemplate.queryForList("select * from flower");
+        for (Map<String, Object> m : list) {
+            mapRedisTemplate.opsForValue().set("flower" + m.get("id"), m);
+        }
     }
 }
