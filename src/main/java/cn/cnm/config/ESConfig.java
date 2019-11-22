@@ -26,7 +26,7 @@ public class ESConfig {
         String[] hostStrs = hosts.split(",");
         for (String host : hostStrs) {
             // 使用的端口号
-            int port = 9300;
+            int port = 9200;
             // 使用的协议
             String schema = "http";
             hostList.add(new HttpHost(host, port, schema));
@@ -34,7 +34,7 @@ public class ESConfig {
     }
 
     @Bean
-    public RestHighLevelClient client() {
+    public RestHighLevelClient restHighLevelClient() {
         RestClientBuilder builder = RestClient.builder(hostList.toArray(new HttpHost[0]));
         // 异步http client连接延时配置
         builder.setRequestConfigCallback(requestConfigBuilder -> {

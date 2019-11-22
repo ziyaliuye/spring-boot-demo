@@ -9,6 +9,11 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.*;
@@ -18,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -239,4 +245,50 @@ class SpringBootDemoApplicationTests {
             e.printStackTrace();
         }
     }
+
+    /* SpringData操作ES */
+    @Qualifier(value = "restHighLevelClient")
+    @Autowired
+    RestHighLevelClient restHighLevelClient;
+
+    /* 视频案例， 代码参考，实测版本不兼容，后期有需要再更正 begin */
+    // 第一种方式， 自定义一个接口集成ElasticsearchRepository接口， 然后直接使用它父接口中的方法（后期更正， 测试不好使）
+    @Autowired
+    // FlowerRepository flowerRepository;
+
+    // 添加索引
+    // @Test
+    public void elasticsearchRepositoryIndex() {
+        // 实体类上必须注解@Document指定存储名称和索引类型
+        Flower flower = new Flower(1, "菊花", 8.8F, "哈哈", 1);
+        // 索引（存储）这个对象
+        // flowerRepository.save(flower);
+    }
+
+    // 添加索引
+    // @Test
+    public void elasticsearchRepositorySearch() {
+        QueryBuilder queryBuilder = QueryBuilders.matchQuery("title", "");
+        // 索引（存储）这个对象
+        // flowerRepository.search(queryBuilder);
+    }
+
+    // @Test
+    public void test1() {
+        //index名必须全小写，否则报错
+        String index = "flower";
+        CreateIndexRequest request = new CreateIndexRequest(index);
+        try {
+            CreateIndexResponse indexResponse = restHighLevelClient.indices().create(request);
+            if (indexResponse.isAcknowledged()) {
+                System.out.println("创建索引成功");
+
+            } else {
+                System.out.println("创建索引失败");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /* 视频案例， 代码参考， 实测版本不兼容， 后期有需要再更正 end */
 }
