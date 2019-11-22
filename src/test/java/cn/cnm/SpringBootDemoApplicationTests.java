@@ -3,6 +3,10 @@ package cn.cnm;
 import cn.cnm.pojo.Flower;
 import cn.cnm.pojo.Person;
 import cn.cnm.service.HelloService;
+import io.searchbox.client.JestClient;
+import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -20,7 +24,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -184,4 +190,53 @@ class SpringBootDemoApplicationTests {
         /* 对应的删除操作与创建流程一致 */
     }
 
+    /* Jest客户端操作ES */
+    @Resource
+    JestClient jestClient;
+
+    // 将对象构建为索引（存储到ES中）
+    // @Test
+    public void jsetIndexBuilder() {
+        // 准备需要保存的数据（索引）
+        Flower flower = new Flower(1, "菊花", 8.8F, "哈哈", 1);
+        /*
+         * Index类构建一个索引功能， 指定具体的索引信息
+         *   Builder需要构建的对象
+         *   index索引的名字
+         *   index索引的类型
+         *   build()构建
+         */
+        Index index = new Index.Builder(flower).index("cnm").type("flower").build();
+        // 使用JestClient保存对象
+        try {
+            jestClient.execute(index);
+        } catch (IOException e) {
+            System.out.println("索引构建失败...");
+            e.printStackTrace();
+        }
+    }
+
+    // 搜索
+    // @Test
+    public void jsetIndexQuery() {
+        //查询表达式
+        String json = "{\n" +
+                "    \"query\" : {\n" +
+                "        \"match\" : {\n" +
+                "            \"name\" : \"牵牛花\"\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        //构建搜索功能
+        Search search = new Search.Builder(json).addIndex("cnm").addType("flower").build();
+        //执行
+        try {
+            SearchResult result = jestClient.execute(search);
+            System.out.println(result.getJsonString());
+        } catch (IOException e) {
+            System.out.println("插叙失败...");
+            e.printStackTrace();
+        }
+    }
 }

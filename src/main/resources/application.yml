@@ -65,8 +65,6 @@ spring:
         concurrency: 5
         max-concurrency: 10
 
-# redis配置
-
 # 多环境文档块配置
 ---
 # 开发环境配置
