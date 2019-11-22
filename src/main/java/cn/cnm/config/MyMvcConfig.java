@@ -2,8 +2,6 @@ package cn.cnm.config;
 
 import cn.cnm.component.LoginHandlerInterceptor;
 import cn.cnm.component.MyLocaleResolver;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;

@@ -25,26 +25,74 @@ logging:
 spring:
   profiles:
     active: dev
-  # JDBC数据源
-  datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://192.168.58.128:3306/ssm?serverTimezone=UTC
-    # url: jdbc:mysql://localhost:3306/ssm?serverTimezone=UTC&characterEncoding=UTF-8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    # 如果有需求， 可以更换数据数据连接池
-    type: com.alibaba.druid.pool.DruidDataSource
-    # druid数据源配置， 这些配置在数据源中是没有的， 需要在配置文件类中指定
-    initialSize: 5
-    minIdle: 5
-    maxActive: 20
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
+    # JDBC数据源
+    datasource:
+      # 主连接
+      primary:
+        username: root
+        password: root
+        url: jdbc:mysql://192.168.58.128:3306/ssm?serverTimezone=UTC
+        # url: jdbc:mysql://localhost:3306/ssm?serverTimezone=UTC&characterEncoding=UTF-8
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        # 如果有需求， 可以更换数据数据连接池
+        type: com.alibaba.druid.pool.DruidDataSource
+        # druid数据源配置， 这些配置在数据源中是没有的， 需要在配置文件类中指定
+        initialSize: 5
+        minIdle: 5
+        maxActive: 20
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+      # Quartz连接
+      quartz:
+        url: jdbc:mysql://192.168.58.128:3306/quartz?serverTimezone=UTC
+        # url: jdbc:mysql://localhost:3306/quartz?serverTimezone=UTC&characterEncoding=UTF-8
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        password: root
+
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: MyScheduler
+            instanceId: AUTO
+          #quartz默认采用内存方式储存定时任务,这里启用jobStore设置为数据库方式。
+          jobStore:
+            # 数据源名称
+            dataSource: quartzDataSource
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    #数据库方式,默认memory内存, jdbc表示使用数据库
+    job-store-type: memory
+    #初始化表结构
+    #jdbc:
+    initialize-schema: never
+
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+      database-platform: org.hibernate.dialect.MySQL55Dialect
+      properties:
+        hibernate:
+          format_sql: true
+          use_sql_comments: true
 
   redis:
     host: 192.168.58.128

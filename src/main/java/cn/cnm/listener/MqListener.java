@@ -1,9 +1,7 @@
-package cn.cnm.component.listener;
+package cn.cnm.listener;
 
 import cn.cnm.pojo.Flower;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
 
 /**
  * @author lele
