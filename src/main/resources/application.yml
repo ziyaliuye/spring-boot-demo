@@ -25,74 +25,78 @@ logging:
 spring:
   profiles:
     active: dev
-    # JDBC数据源
-    datasource:
-      # 主连接
-      primary:
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      # 配置业务数据源
+      business:
+        url: jdbc:mysql://192.168.58.128:3306/ssm?serverTimezone=UTC
+        #url: jdbc:mysql://localhost:3306/ssm?serverTimezone=UTC&characterEncoding=UTF-8
         username: root
         password: root
-        url: jdbc:mysql://192.168.58.128:3306/ssm?serverTimezone=UTC
-        # url: jdbc:mysql://localhost:3306/ssm?serverTimezone=UTC&characterEncoding=UTF-8
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        # 如果有需求， 可以更换数据数据连接池
-        type: com.alibaba.druid.pool.DruidDataSource
-        # druid数据源配置， 这些配置在数据源中是没有的， 需要在配置文件类中指定
-        initialSize: 5
-        minIdle: 5
-        maxActive: 20
-        maxWait: 60000
-        timeBetweenEvictionRunsMillis: 60000
-        minEvictableIdleTimeMillis: 300000
-        validationQuery: SELECT 1 FROM DUAL
-        testWhileIdle: true
-        testOnBorrow: false
-        testOnReturn: false
-      # Quartz连接
+      #配置Quartz数据源
       quartz:
         url: jdbc:mysql://192.168.58.128:3306/quartz?serverTimezone=UTC
-        # url: jdbc:mysql://localhost:3306/quartz?serverTimezone=UTC&characterEncoding=UTF-8
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        #url: jdbc:mysql://localhost:3306/quartz?serverTimezone=UTC&characterEncoding=UTF-8
         username: root
         password: root
-
-  quartz:
-    #相关属性配置
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceName: MyScheduler
-            instanceId: AUTO
-          #quartz默认采用内存方式储存定时任务,这里启用jobStore设置为数据库方式。
-          jobStore:
-            # 数据源名称
-            dataSource: quartzDataSource
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            tablePrefix: QRTZ_
-            isClustered: true
-            clusterCheckinInterval: 10000
-            useProperties: false
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
-    #数据库方式,默认memory内存, jdbc表示使用数据库
-    job-store-type: memory
-    #初始化表结构
-    #jdbc:
-    initialize-schema: never
-
-    jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
-      database-platform: org.hibernate.dialect.MySQL55Dialect
+      # 下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 5
+      minIdle: 5
+      maxActive: 15
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,log4j2
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+      remove-abandoned: true
+      remove-abandoned-timeout: 180
+      log-abandoned: true
+    quartz:
+      jdbc:
+      #配置是否每次重启项目都自动生成Quartz表结构,在此使用always生成一次后就可以改为never配置（实测还是要手工建表）
+      #initialize-schema: never
+      # 配置方式memory表示使用内存方式， 会忽略所有jdbc配置， 简单任务时可以使用
+      #job-store-type: memory
+      job-store-type: jdbc
       properties:
-        hibernate:
-          format_sql: true
-          use_sql_comments: true
+        org:
+          quartz:
+            scheduler:
+              instanceName: etlCleanScheduler
+              instanceId: AUTO
+            jobStore:
+              acquireTriggersWithinLock: true   #在锁定状态下获取触发器
+              class: org.quartz.impl.jdbcjobstore.JobStoreTX #持久化配置
+              driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate #我们仅为数据库制作了特定于数据库的代理
+              useProperties: true #以指示JDBCJobStore将JobDataMaps中的所有值都作为字符串，因此可以作为名称 - 值对存储而不是在BLOB列中以其序列化形式存储更多复杂的对象。从长远来看，这是更安全的，因为您避免了将非String类序列化为BLOB的类版本问题。
+              tablePrefix: QRTZ_  #数据库表前缀
+              misfireThreshold: 6000 #在被认为“失火”之前，调度程序将“容忍”一个Triggers将其下一个启动时间通过的毫秒数。默认值（如果您在配置中未输入此属性）为60000（60秒）。
+              clusterCheckinInterval: 5000 #设置此实例“检入”*与群集的其他实例的频率（以毫秒为单位）。影响检测失败实例的速度。
+              isClustered: false #打开群集功能,集群模式需要在多台服务器上做时间同步或者使用zookeeper去解决
+              threadPool: #连接池
+                class: org.quartz.simpl.SimpleThreadPool
+                threadCount: 10 #最大线程个数
+                threadPriority: 5 #线程优先级
+                threadsInheritContextClassLoaderOfInitializingThread: true
+              startup-delay: 30
+              overwrite-existing-jobs: true
 
   redis:
     host: 192.168.58.128

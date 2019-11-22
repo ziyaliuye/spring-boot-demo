@@ -2,6 +2,7 @@ package cn.cnm.utils;
 
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  * @Email 414955507@qq.com
  * @date 2019/11/22 20:20
  */
+@Component
 public class QuartzUtils {
     /**
      * 注入任务调度器
@@ -28,12 +30,15 @@ public class QuartzUtils {
      * @param cls     任务
      * @param time    时间设置，参考quartz说明文档
      */
-    private void addJob(String jobName, Class<? extends Job> cls, String time) {
+    public void addJob(String jobName, Class<? extends Job> cls, String time) {
         try {
-            JobDetail jobDetail = JobBuilder.newJob(cls).withIdentity(jobName, JOB_GROUP_NAME).build();    //用于描叙Job实现类及其他的一些静态信息，构建一个作业实例
+            //用于描叙Job实现类及其他的一些静态信息，构建一个作业实例
+            JobDetail jobDetail = JobBuilder.newJob(cls).withIdentity(jobName, JOB_GROUP_NAME).build();
             CronTrigger trigger = TriggerBuilder
-                    .newTrigger()                                                                        //创建一个新的TriggerBuilder来规范一个触发器
-                    .withIdentity(jobName, TRIGGER_GROUP_NAME)                                            //给触发器起一个名字和组名
+                    //创建一个新的TriggerBuilder来规范一个触发器
+                    .newTrigger()
+                    //给触发器起一个名字和组名
+                    .withIdentity(jobName, TRIGGER_GROUP_NAME)
                     .withSchedule(CronScheduleBuilder.cronSchedule(time))
                     .build();
             sched.scheduleJob(jobDetail, trigger);
