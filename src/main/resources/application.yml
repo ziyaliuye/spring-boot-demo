@@ -64,6 +64,10 @@ spring:
         acknowledge-mode: manual
         concurrency: 5
         max-concurrency: 10
+  # ES Jest配置
+  elasticsearch:
+    jest:
+      uris: http://192.168.58.128:9200
 
 # 多环境文档块配置
 ---

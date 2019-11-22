@@ -197,11 +197,11 @@ class SpringBootDemoApplicationTests {
     }
 
     /* Jest客户端操作ES */
-    @Resource
+    @Autowired
     JestClient jestClient;
 
     // 将对象构建为索引（存储到ES中）
-    // @Test
+    @Test
     public void jsetIndexBuilder() {
         // 准备需要保存的数据（索引）
         Flower flower = new Flower(1, "菊花", 8.8F, "哈哈", 1);
@@ -223,7 +223,7 @@ class SpringBootDemoApplicationTests {
     }
 
     // 搜索
-    // @Test
+    @Test
     public void jsetIndexQuery() {
         //查询表达式
         String json = "{\n" +
@@ -241,18 +241,17 @@ class SpringBootDemoApplicationTests {
             SearchResult result = jestClient.execute(search);
             System.out.println(result.getJsonString());
         } catch (IOException e) {
-            System.out.println("插叙失败...");
+            System.out.println("查询失败...");
             e.printStackTrace();
         }
     }
 
-    /* SpringData操作ES */
+    /* SpringData操作ES（测试无效， 先用Jest顶着， 后期更正） begin */
     @Qualifier(value = "restHighLevelClient")
     @Autowired
     RestHighLevelClient restHighLevelClient;
 
-    /* 视频案例， 代码参考，实测版本不兼容，后期有需要再更正 begin */
-    // 第一种方式， 自定义一个接口集成ElasticsearchRepository接口， 然后直接使用它父接口中的方法（后期更正， 测试不好使）
+    // 自定义一个接口集成ElasticsearchRepository接口， 然后直接使用它父接口中的方法
     @Autowired
     // FlowerRepository flowerRepository;
 
@@ -290,5 +289,5 @@ class SpringBootDemoApplicationTests {
             e.printStackTrace();
         }
     }
-    /* 视频案例， 代码参考， 实测版本不兼容， 后期有需要再更正 end */
+    /* SpringData操作ES（测试无效， 先用Jest顶着， 后期更正） end */
 }
