@@ -1,5 +1,6 @@
 package cn.cnm;
 
+import cn.cnm.mail.MailMessageService;
 import cn.cnm.pojo.Flower;
 import cn.cnm.pojo.Person;
 import cn.cnm.service.HelloService;
@@ -20,6 +21,7 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,6 +31,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -290,4 +293,37 @@ class SpringBootDemoApplicationTests {
         }
     }
     /* SpringData操作ES（测试无效， 先用Jest顶着， 后期更正） end */
+
+    /* 发送邮件 */
+    @Autowired
+    MailMessageService mailMessageService;
+    // 收件人
+    @Value("${touser}")
+    String touser;
+    // 抄送人
+    @Value("${copyuser}")
+    String copyuser;
+
+    // 发送文字邮件
+    @Test
+    public void sendMail() {
+        // 主题
+        String topic = "在吗？";
+        // 内容
+        String text = "吃了没， 没吃就多吃点...";
+        // 收件人
+        String[] tousers = touser.split(",");
+        mailMessageService.sendSimple(topic, text, tousers);
+    }
+
+    // 发送带附件邮件
+    @Test
+    public void sendFileMail() {
+        // 主题
+        String topic = "在吗？";
+        // 内容
+        String text = "吃了没， 没吃就多吃点...";
+        // 收件人
+        String[] tousers = touser.split(",");
+    }
 }
