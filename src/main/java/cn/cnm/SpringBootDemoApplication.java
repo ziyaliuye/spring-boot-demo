@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableRabbit
 // 开启异步任务功能
 @EnableAsync
-// 开启定时任务
+// 开启定时任务功能
 @EnableScheduling
 public class SpringBootDemoApplication {
     public static void main(String[] args) {
