@@ -149,7 +149,7 @@ class SpringBootDemoApplicationTests {
         rabbitTemplate.convertAndSend("exchange.direct", "cn.news", flower);
     }
 
-    // AmqpAdmin用于管理RabbitMQ组件， 用于创建队列、交换器等操作
+    /* AmqpAdmin用于管理RabbitMQ组件， 用于创建队列、交换器等操作 */
     @Autowired
     AmqpAdmin amqpAdmin;
 
