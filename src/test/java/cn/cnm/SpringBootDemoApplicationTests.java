@@ -7,8 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -119,9 +118,6 @@ class SpringBootDemoApplicationTests {
     // RabbitTemplate用于操作RabbitMQ， 发送、消费消息等操作
     @Autowired
     RabbitTemplate rabbitTemplate;
-    // AmqpAdmin用于管理RabbitMQ组件， 用于创建队列、交换器等操作
-    @Autowired
-    AmqpAdmin amqpAdmin;
 
     // 单播（点对点）消息发送测试
     @Test
@@ -152,4 +148,40 @@ class SpringBootDemoApplicationTests {
         // 第一个参数：交换器 第二个参数：路由键 第三个参数：要发送的对象， 会自动序列化并当成消息体发送
         rabbitTemplate.convertAndSend("exchange.direct", "cn.news", flower);
     }
+
+    // AmqpAdmin用于管理RabbitMQ组件， 用于创建队列、交换器等操作
+    @Autowired
+    AmqpAdmin amqpAdmin;
+
+    @Test
+    public void createAmqpParts() {
+        // Exchange是一个接口， 实例化它的实现类， 对应的就是RabbitMQ中的三种Exchange
+        // 参数还可以指定是否持久化, 默认就是， 这里先省略
+        Exchange exchange = new DirectExchange("amqpadmin.exchange");
+        /* 凡是以declare开头的方法就是创建组件, remove开头的方法就是删除组件 */
+        amqpAdmin.declareExchange(exchange);
+        System.out.println("交换器：amqpadmin.exchange 创建完成...");
+
+        // Queue是一个类，就是队列的意思，使用空参构造器会随机取一个队列名字
+        Queue queue = new Queue("amqpadmin.queue");
+        amqpAdmin.declareQueue(queue);
+        System.out.println("队列：amqpadmin.queue 创建完成...");
+
+        /*
+         * 创建绑定规则， 对应的类就是Binding
+         *  第一个参数：目的地名字
+         *  第二个参数：目的地类型， 绑定交换器还是队列, 这里一般就选队列
+         *  第三个参数：交换器的名字
+         *  第四个参数：路由键, 是精准匹配还是模糊取决于交换器类型
+         *  第五个参数：参数头信息， Map类型
+         */
+        Binding binding = new Binding(
+                "amqpadmin.queue", Binding.DestinationType.QUEUE,
+                "amqpadmin.exchange", "amqp.wocao", null);
+        amqpAdmin.declareBinding(binding);
+        System.out.println("交换器队列绑定成功....");
+
+        /* 对应的删除操作与创建流程一致 */
+    }
+
 }
