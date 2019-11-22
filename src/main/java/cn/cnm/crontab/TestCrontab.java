@@ -17,7 +17,7 @@ import java.util.Date;
  * @Email 414955507@qq.com
  * @date 2019/11/22 21:11
  */
-/* @DisallowConcurrentExecution：在分布式环境下允许并发执行 */
+/* @DisallowConcurrentExecution：在分布式环境下不允许并发执行 */
 @DisallowConcurrentExecution
 /* 不要忘了加入容器中 */
 @Service
