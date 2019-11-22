@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 /* 指定当前类是一个配置类， 就是替代之前的Spring配置文件 */
 @Configuration
-public class myConfig {
+public class MyConfig {
     /* 将方法的返回值添加到容器中， 组件ID默认就是方法名 */
     @Bean
     public HelloService helloService() {

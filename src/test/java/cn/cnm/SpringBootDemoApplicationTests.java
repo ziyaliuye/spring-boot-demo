@@ -22,7 +22,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,7 +130,7 @@ class SpringBootDemoApplicationTests {
         // rabbitTemplate.send("", "", Message);
         Map<String, Object> map = new HashMap<>();
         map.put("msg1", "Hello first AMQP...");
-        map.put("msg2", Arrays.asList("you", "are", "da", "shabi"));
+        map.put("msg2", "you are da shabi");
         // 第一个参数：交换器 第二个参数：路由键 第三个参数：要发送的对象， 会自动序列化并当成消息体发送
         rabbitTemplate.convertAndSend("exchange.direct", "cn.news", map);
     }

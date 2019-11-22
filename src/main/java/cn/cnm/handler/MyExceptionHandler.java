@@ -23,7 +23,7 @@ public class MyExceptionHandler {
     /* 将返回的对象自动转为Json串 */
     @ResponseBody
     public Map<String, Object> myHandlerException(Exception e) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(10);
         map.put("code", "no user...");
         map.put("message", e.getMessage());
         return map;
