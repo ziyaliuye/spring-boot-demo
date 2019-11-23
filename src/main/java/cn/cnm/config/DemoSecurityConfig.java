@@ -1,11 +1,5 @@
 package cn.cnm.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-
 /**
  * @author lele
  * @version 1.0
@@ -16,7 +10,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 /* 开启SecurityWeb的权限控制, 这个注解上面已经注解了@Configuration */
 // @EnableWebSecurity
 @SuppressWarnings("all")
-public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
+/*public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
     // 配置权限规则
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -39,7 +33,7 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
     // 配置认证规则， 就是验证账户密码， 默认从内存中获取
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        /* inXxx就是从内存中获取， jdbcXxx则是通过查询数据库方式从表中获取登录信息 */
+        *//* inXxx就是从内存中获取， jdbcXxx则是通过查询数据库方式从表中获取登录信息 *//*
         // 设置匹配的账户密码， roles该账户所属角色， 可以有多个角色
         auth.inMemoryAuthentication().withUser("user1").password("123456")
                 .roles("VIP1", "VIP2", "VIP3")
@@ -51,13 +45,15 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("VIP1");
     }
 
-    /*
+    *//*
      *  SpringBoot2.X抛弃了NoOpPasswordEncoder
      *      要求用户保存的密码必须要使用加密算法后存储
      *      在登录验证的时候Security会将获得的密码在进行编码后再和数据库中加密后的密码进行对比
-     */
+     *//*
     @Bean
     public static NoOpPasswordEncoder passwordEncoder() {
         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
     }
-}
+}*/
+
+public class DemoSecurityConfig{}
