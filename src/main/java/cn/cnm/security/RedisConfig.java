@@ -15,7 +15,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @Email 414955507@qq.com
  * @date 2019/11/23 14:39
  */
-@Configuration
+// @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
     // key生成规则

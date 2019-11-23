@@ -14,7 +14,7 @@ import java.util.Set;
  * @Email 414955507@qq.com
  * @date 2019/11/23 14:04
  */
-@Repository("webUserDao")
+// @Repository("webUserDao")
 public class WebUserDaoImpl {
     // 根据用户名查询
     public WebUserDO getUserByUsername(String username) {

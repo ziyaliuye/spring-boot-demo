@@ -15,7 +15,7 @@ import java.util.Set;
  * @Email 414955507@qq.com
  * @date 2019/11/23 13:05
  */
-@Service("webUserDetailsService")
+// @Service("webUserDetailsService")
 public class WebUserDetailsServiceImpl implements UserDetailsService {
     private final WebUserDaoImpl webUserDao;
 
