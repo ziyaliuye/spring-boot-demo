@@ -3,6 +3,7 @@ package cn.cnm;
 import cn.cnm.mail.MailMessageService;
 import cn.cnm.pojo.Flower;
 import cn.cnm.pojo.Person;
+import cn.cnm.security.WebUserDetail;
 import cn.cnm.service.HelloService;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Index;
@@ -30,6 +31,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -325,5 +327,11 @@ class SpringBootDemoApplicationTests {
         String text = "吃了没， 没吃就多吃点...";
         // 收件人
         String[] tousers = touser.split(",");
+    }
+
+    /* SpringSecurity测试 */
+    @Test
+    public void securityTest() {
+        WebUserDetail userDetails = (WebUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

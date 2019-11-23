@@ -3,7 +3,6 @@ package cn.cnm.config;
 import cn.cnm.component.LoginHandlerInterceptor;
 import cn.cnm.component.MyLocaleResolver;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -16,7 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Email 414955507@qq.com
  * @date 2019/11/19 19:54
  */
-@Configuration
+/* MVC组件配置， 方便测试先注释掉 */
+//@Configuration
 public class MyMvcConfig implements WebMvcConfigurer {
     // 添加视图映射规则
     @Override
