@@ -2,13 +2,10 @@ package cn.cnm.controller;
 
 import cn.cnm.pojo.Flower;
 import cn.cnm.service.FlowerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * @author lele
@@ -19,12 +16,16 @@ import javax.annotation.Resource;
  */
 @RestController
 public class FlowerController {
-    @Autowired
-    FlowerService flowerService;
+    private final FlowerService flowerService;
+
+    public FlowerController(FlowerService flowerService) {
+        this.flowerService = flowerService;
+    }
 
     @GetMapping("/flower/{id}")
     // @PathVariable将URL上的参数id绑定到右侧的参数中
     public Flower selectById(@PathVariable("id") Integer id) {
+        System.out.println("7777");
         return flowerService.selectById(id);
     }
 

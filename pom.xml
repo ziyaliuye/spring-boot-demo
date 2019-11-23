@@ -220,6 +220,12 @@
             <artifactId>zkclient</artifactId>
             <version>0.11</version>
         </dependency>
+        <!-- 管理监控 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
