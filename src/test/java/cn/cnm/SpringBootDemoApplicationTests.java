@@ -328,10 +328,4 @@ class SpringBootDemoApplicationTests {
         // 收件人
         String[] tousers = touser.split(",");
     }
-
-    /* SpringSecurity测试 */
-    @Test
-    public void securityTest() {
-        WebUserDetail userDetails = (WebUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 }
