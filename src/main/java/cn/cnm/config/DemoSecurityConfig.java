@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
  * @date 2019/11/23 11:26
  */
 /* 开启SecurityWeb的权限控制, 这个注解上面已经注解了@Configuration */
-@EnableWebSecurity
+// @EnableWebSecurity
 @SuppressWarnings("all")
 public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
     // 配置权限规则
